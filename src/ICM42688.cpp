@@ -148,6 +148,19 @@ int ICM42688::setGyroFS(GyroFS fssel) {
 	return 1;
 }
 
+/* get the accelerometer full scale range return the ACCEL_FS_SEL value*/
+int ICM42688::getGyroFS() {
+	// use low speed SPI for register setting
+	_useSPIHS = false;
+	setBank(0);
+	// read current register value
+	uint8_t reg;
+	if (readRegisters(UB0_REG_GYRO_CONFIG0, 1, &reg) < 0) {
+		return -1;
+	}
+	return (reg & 0x1F) >> 5;
+}
+
 int ICM42688::setAccelODR(ODR odr) {
 	// use low speed SPI for register setting
 	_useSPIHS = false;
